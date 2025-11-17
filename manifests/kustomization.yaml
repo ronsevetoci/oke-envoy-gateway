@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - envoyproxy-oci.yaml
+  - gatewayclass.yaml
+  - gateway.yaml
+  - demo-app.yaml
+  - httproute.yaml
