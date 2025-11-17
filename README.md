@@ -12,6 +12,15 @@ on Oracle Kubernetes Engine (OKE), fronted by an OCI Load Balancer.
   - `demo-app.yaml`       - Simple http-echo demo application and Service.
   - `httproute.yaml`      - HTTPRoute that sends all traffic (`/`) to `my-app`.
 
+## Pods as Backends on OKE
+
+This deployment demonstrates a production‑grade configuration of Envoy Gateway on Oracle Kubernetes Engine (OKE) where the **OCI Load Balancer directly targets pod IPs**, rather than routing traffic through worker node IPs.
+
+OKE supports this capability through its Enhanced Cluster architecture and the Native Pod Network (NPN) CNI, which allows OCI Load Balancers to register pods as backends. This improves traffic efficiency, reduces hop count, and enables more consistent load distribution.
+
+Official Oracle documentation on pods-as-backends:
+https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengconfiguringloadbalancersnetworkloadbalancers-subtopic.htm#contengcreatingloadbalancer_topic_Specifying_pods_as_backends__section_security-mgmt-for-pods-as-backends
+
 ## Prerequisites
 
 - An OKE cluster (1.30+ recommended).
