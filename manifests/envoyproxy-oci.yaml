@@ -18,4 +18,4 @@ spec:
           service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "100"
           oci-load-balancer.oraclecloud.com/health-check: '{"protocol":"TCP","port":10080,"retries":3,"timeoutInMillis":4000}'
           oci.oraclecloud.com/security-rule-management-mode: "NSG"
-          oci.oraclecloud.com/oci-backend-network-security-group: "ocid1.networksecuritygroup.oc1.eu-frankfurt-1.aaaaaaaawsxfqo25hwtryxzsd655ky3pg2hzws7qgceerfeznxelom52k2wq"
+          oci.oraclecloud.com/oci-backend-network-security-group: "<PODS_NSG_OCID>" # Replace with the OCID of the NSG associated with the Pods subnet
