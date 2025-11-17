@@ -27,6 +27,24 @@ https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengconfiguringloadb
 - `kubectl` configured against the OKE cluster.
 - `helm` installed locally.
 
+### Required Update: Set the Pods NSG OCID
+
+Before applying the manifests, you **must update** the file:
+
+```
+`manifests/envoyproxy-oci.yaml`
+```
+
+and replace the placeholder:
+
+```
+<PODS_NSG_OCID>
+```
+
+with the actual OCID of the Network Security Group (NSG) attached to your **pods subnet**.
+
+This OCID is required so the OCI Load Balancer can register pod IPs as backends when operating in **NSG rule‑management mode**.
+
 ## 1. Install Envoy Gateway
 
 ```bash
