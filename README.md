@@ -19,7 +19,7 @@ This deployment demonstrates a production‑grade configuration of Envoy Gateway
 OKE supports this capability through its Enhanced Cluster architecture and the Native Pod Network (NPN) CNI, which allows OCI Load Balancers to register pods as backends. This improves traffic efficiency, reduces hop count, and enables more consistent load distribution.
 
 Official Oracle documentation on pods-as-backends:
-https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengconfiguringloadbalancersnetworkloadbalancers-subtopic.htm#contengcreatingloadbalancer_topic_Specifying_pods_as_backends__section_security-mgmt-for-pods-as-backends
+https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengconfiguringloadbalancersnetworkloadbalancers-subtopic.htm#contengcreatingloadbalancer_topic_Specifying_pods_as_backends
 
 ## Prerequisites
 
