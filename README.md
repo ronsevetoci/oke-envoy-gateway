@@ -91,3 +91,7 @@ kubectl delete -k manifests/
 helm uninstall eg -n envoy-gateway-system
 kubectl delete namespace envoy-gateway-system
 ```
+
+## 5. TLS setup
+For TLS configuration, including Let's Encrypt and HTTPS setup,
+see the dedicated guide in [`manifests/tls/README.md`](manifests/tls/README.md).
