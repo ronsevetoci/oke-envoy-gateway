@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   hostnames:
-  - "echo.79.76.98.111.nip.io"
+  - "echo.79.76.98.111.nip.io" #Your external IP here
   parentRefs:
   - name: public-gateway
     namespace: default

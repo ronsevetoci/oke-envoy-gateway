@@ -7,7 +7,7 @@ metadata:
 spec:
   secretName: echo-tls
   dnsNames:
-  - "echo.79.76.98.111.nip.io"
+  - "echo.79.76.98.111.nip.io" #Your external IP here
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
