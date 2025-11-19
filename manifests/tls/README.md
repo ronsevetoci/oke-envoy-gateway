@@ -106,7 +106,7 @@ kubectl get challenges -A
 Apply:
 
 ```bash
-kubectl apply -f gateway-https.yaml
+kubectl apply -f manifests/tls/gateway-https.yaml
 ```
 
 ---
