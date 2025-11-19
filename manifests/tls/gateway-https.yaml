@@ -12,3 +12,14 @@ spec:
     allowedRoutes:
       namespaces:
         from: Same
+  - name: https
+    protocol: HTTPS
+    port: 443
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: echo-tls   # The name of the secret created by cert-manager
+    allowedRoutes:
+      namespaces:
+        from: Same
