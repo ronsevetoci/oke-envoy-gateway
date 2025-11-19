@@ -1,0 +1,13 @@
+# certificate-echo.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: echo-tls
+  namespace: default
+spec:
+  secretName: echo-tls
+  dnsNames:
+  - "echo.79.76.98.111.nip.io"
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
