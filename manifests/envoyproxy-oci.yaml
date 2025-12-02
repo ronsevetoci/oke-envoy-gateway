@@ -19,4 +19,4 @@ spec:
           oci-load-balancer.oraclecloud.com/health-check: '{"protocol":"HTTP","port":10080,"urlPath":"/","retries":3,"timeoutInMillis":4000}'
           oci.oraclecloud.com/security-rule-management-mode: "NSG"
           oci.oraclecloud.com/oci-backend-network-security-group: "ocid1.networksecuritygroup.oc1.eu-frankfurt-1.aaaaaaaagwg664yixfjgvzmvimwxxor7sjlklxg2qnyjmvgyulf66xv4fcba" # Replace with the OCID of the NSG associated with the Pods subnet
-          oci-load-balancer.oraclecloud.com/backend-protocol: "HTTP"
+          service.beta.kubernetes.io/oci-load-balancer-backend-protocol: "HTTP"
