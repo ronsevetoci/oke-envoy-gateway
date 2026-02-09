@@ -75,10 +75,39 @@ Take the `EXTERNAL-IP` of the Envoy Gateway LoadBalancer service and test:
 curl http://<EXTERNAL-IP>/
 ```
 
-You should see:
+You should get a response with your request information and the details of the pod answering:
 
 ```text
-Hello from Envoy Gateway on OKE
+Hostname: demo-app-6d449f9fd9-9wxg6
+
+Pod Information:
+	-no pod information available-
+
+Server values:
+	server_version=nginx: 1.13.3 - lua: 10008
+
+Request Information:
+	client_address=10.0.164.247
+	method=GET
+	real path=/
+	query=
+	request_version=1.1
+	request_uri=http://138.2.156.172:8080/
+
+Request Headers:
+	accept=*/*
+	host=138.2.156.172
+	user-agent=curl/8.7.1
+	x-envoy-external-address=10.0.2.55
+	x-forwarded-for=62.56.234.66,10.0.2.55
+	x-forwarded-host=138.2.156.172:80
+	x-forwarded-port=80
+	x-forwarded-proto=http
+	x-real-ip=62.56.234.66
+	x-request-id=b225d939-6011-4535-ab64-cf5c97c48b63
+
+Request Body:
+	-no body in request-
 ```
 
 ## 4. Cleanup
