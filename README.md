@@ -25,6 +25,7 @@ https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengconfiguringloadb
 
 - An OKE cluster (1.30+ recommended).
 - `kubectl` configured against the OKE cluster.
+- `Gateway API CRDs` deployed on the cluster - https://gateway-api.sigs.k8s.io/guides/getting-started/#install-standard-channel
 - `helm` installed locally.
 
 ### Required Update: Set the Pods NSG OCID
