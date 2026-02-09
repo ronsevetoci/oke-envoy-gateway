@@ -48,10 +48,7 @@ This OCID is required so the OCI Load Balancer can register pod IPs as backends 
 ## 1. Install Envoy Gateway
 
 ```bash
-helm install eg oci://docker.io/envoyproxy/gateway-helm \
-  --version v1.6.0 \
-  -n envoy-gateway-system \
-  --create-namespace
+helm install eg oci://docker.io/envoyproxy/gateway-helm --version v0.0.0-latest -n envoy-gateway-system --create-namespace
 ```
 
 Wait for Envoy Gateway to be ready:
