@@ -66,7 +66,7 @@ kubectl apply -k manifests/
 ## 3. Get the external IP
 
 ```bash
-kubectl get svc -A | grep envoy
+kubectl get svc -A -l gateway.envoyproxy.io/owning-gateway-name=public-gateway
 ```
 
 Take the `EXTERNAL-IP` of the Envoy Gateway LoadBalancer service and test:
