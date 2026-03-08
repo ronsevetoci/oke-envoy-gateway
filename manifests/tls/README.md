@@ -79,7 +79,7 @@ This will:
 Apply:
 
 ```bash
-kubectl apply -f manifests/tls/clusterissuer.yaml
+kubectl apply -f manifests/tls/issuer.yaml
 ```
 
 ---
