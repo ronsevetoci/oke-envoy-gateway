@@ -10,13 +10,16 @@ spec:
       envoyService:
         type: LoadBalancer
         allocateLoadBalancerNodePorts: false
-        externalTrafficPolicy: Cluster
+        externalTrafficPolicy: Local
         annotations:
           oci.oraclecloud.com/load-balancer-type: "lb"
           service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
           service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
           service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "100"
-          oci-load-balancer.oraclecloud.com/health-check: '{"protocol":"HTTP","port":10080,"urlPath":"/","retries":3,"timeoutInMillis":4000}'
+          oci-load-balancer.oraclecloud.com/health-check: '{"protocol":"HTTP","port":19003,"urlPath":"/ready","retries":3,"timeoutInMillis":4000}'
           oci.oraclecloud.com/security-rule-management-mode: "NSG"
-          oci.oraclecloud.com/oci-backend-network-security-group: "<PODS_NSG_OCID>" # Replace with the OCID of the NSG associated with the Pods subnet
+          oci.oraclecloud.com/oci-backend-network-security-group: "ocid1.networksecuritygroup.oc1.eu-frankfurt-1.aaaaaaaagpgbuvfknthclsnhvn26yfsnacjjuvt42jxkn6dvma4eghylwffq" # Replace with the OCID of the NSG associated with the Pods subnet
           service.beta.kubernetes.io/oci-load-balancer-backend-protocol: "HTTP"
+          service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
+          oci.oraclecloud.com/oci-load-balancer-listener-ssl-config: '{"CipherSuiteName": "oci-default-ssl-cipher-suite-v1", "Protocols": ["TLSv1.2"]}'
+          service.beta.kubernetes.io/oci-load-balancer-tls-secret: envoy-gateway-tls-secret
