@@ -45,13 +45,11 @@ with the actual OCID of the Network Security Group (NSG) attached to your **pods
 
 This OCID is required so the OCI Load Balancer can register pod IPs as backends when operating in **NSG rule‑management mode**.
 
-## 1. Install Envoy Gateway
+## 1. Install Envoy Gateway (current stable v1.7.0)
 
 ```bash
-helm install eg oci://docker.io/envoyproxy/gateway-helm --version v0.0.0-latest -n envoy-gateway-system --create-namespace
+helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.7.0 -n envoy-gateway-system --create-namespace
 ```
-
-Wait for Envoy Gateway to be ready:
 
 ```bash
 kubectl -n envoy-gateway-system get pods
