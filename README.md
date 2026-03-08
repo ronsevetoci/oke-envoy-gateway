@@ -3,7 +3,7 @@
 This repo contains a minimal, working example of running Envoy Gateway with Gateway API
 on Oracle Kubernetes Engine (OKE), fronted by an OCI Load Balancer.
 
-# TLS support added using Kubernetes stored secrets and LB TLS termination
+## TLS support added using Kubernetes stored secrets and LB TLS termination
 
 New available annotations allow us to offload Kubernetes stored secrets via ALB CCM integration, this can also be done via LetsEncrypt and Certificate managed certificates - will be added soon. 
 
