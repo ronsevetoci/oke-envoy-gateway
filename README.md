@@ -3,14 +3,18 @@
 This repo contains a minimal, working example of running Envoy Gateway with Gateway API
 on Oracle Kubernetes Engine (OKE), fronted by an OCI Load Balancer.
 
+# TLS support added using Kubernetes stored secrets and LB TLS termination
+
+New available annotations allow us to offload Kubernetes stored secrets via ALB CCM integration, this can also be done via LetsEncrypt and Certificate managed certificates - will be added soon. 
+
 ## Structure
 
 - `manifests/`
-  - `envoyproxy-oci.yaml` - Configures Envoy Gateway to expose an OCI Load Balancer with flexible shape.
+  - `envoyproxy-oci.yaml` - Configures Envoy Gateway to expose an OCI Load Balancer with flexible shape and TLS Termination.
   - `gatewayclass.yaml`   - GatewayClass that binds to the EnvoyProxy.
-  - `gateway.yaml`        - Public HTTP Gateway in the `default` namespace.
+  - `gateway.yaml`        - Public HTTP Gateway with HTTP and HTTPS sections.
   - `demo-app.yaml`       - Simple http-echo demo application and Service.
-  - `httproute.yaml`      - HTTPRoute that sends all traffic (`/`) to `my-app`.
+  - `httproute.yaml`      - HTTPRoute that sends all traffic (`/`) to `my-app` bound to both HTTP and HTTPS.
 
 ## Pods as Backends on OKE
 
@@ -27,7 +31,7 @@ https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengconfiguringloadb
 - `kubectl` configured against the OKE cluster.
 - `helm` installed locally.
 
-### Required Update: Set the Pods NSG OCID
+## 1. Set the Pods NSG OCID
 
 Before applying the manifests, you **must update** the file:
 
@@ -45,32 +49,58 @@ with the actual OCID of the Network Security Group (NSG) attached to your **pods
 
 This OCID is required so the OCI Load Balancer can register pod IPs as backends when operating in **NSG rule‑management mode**.
 
-## 1. Install Envoy Gateway (current stable v1.7.0)
+## 2. Install Envoy Gateway (current stable v1.7.0) - this Helm repo deploys Gateway API CRDs - if you preinstalled Gateway API CRDs this installation will fail!
 
 ```bash
 helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.7.0 -n envoy-gateway-system --create-namespace
 ```
 
+Confirm the Envoy Gateway pods are running.
+
 ```bash
 kubectl -n envoy-gateway-system get pods
 ```
 
-## 2. Apply manifests
+## 3. Provide/Create TLS certificate as Kubernets secret for Loadbalancer TLS termination (if you have your own certificate use your required Ceritificate and key)
+
+For the purpose of this demostration i will use a self-signed TLS certificate - 
+
+Create the certificate and key - 
+```bash
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout tls.key \
+  -out tls.crt \
+  -subj "/CN=oke-envoy-gateway-bootstrap"
+```
+Create the Kubernetes secret and populate it with the previously created certificate and key - 
+```bash
+kubectl create secret tls envoy-gateway-tls-secret \
+  --cert=tls.crt \
+  --key=tls.key \
+  -n envoy-gateway-system
+```
+
+Attention - this will create a localy stored tls.key and tls.crt files! removed these when done! this is not to be used in any scenario which is not a demo!
+
+## 4. Apply manifests
 
 ```bash
 kubectl apply -k manifests/
 ```
 
-## 3. Get the external IP
+## 5. Get the external IP
+
+Check the obejct of type Service:Loadbalancer has been successfully assigned a public IP, run the following command to populate an environment variable, if this fails your LB was not properly created, this can be caused by not assigning the correct NSG OCID as required in Step 1.
 
 ```bash
-kubectl get svc -A -l gateway.envoyproxy.io/owning-gateway-name=public-gateway
+LB_IP=$(kubectl get svc -n envoy-gateway-system -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}')
+echo $LB_IP
 ```
 
-Take the `EXTERNAL-IP` of the Envoy Gateway LoadBalancer service and test:
+Now we should be able to curl our LB on HTTP - 
 
 ```bash
-curl http://<EXTERNAL-IP>/
+curl http://$LB_IP/
 ```
 
 You should get a response with your request information and the details of the pod answering:
@@ -90,32 +120,35 @@ Request Information:
 	real path=/
 	query=
 	request_version=1.1
-	request_uri=http://138.2.156.172:8080/
+	request_uri=http://X.X.X.X:8080/
 
 Request Headers:
 	accept=*/*
-	host=138.2.156.172
+	host=X.X.X.X
 	user-agent=curl/8.7.1
-	x-envoy-external-address=10.0.2.55
-	x-forwarded-for=62.56.234.66,10.0.2.55
-	x-forwarded-host=138.2.156.172:80
+	x-envoy-external-address=10.X.X.X
+	x-forwarded-for=Y.Y.Y.Y,10.X.X.X
+	x-forwarded-host=X.X.X.X:80
 	x-forwarded-port=80
 	x-forwarded-proto=http
-	x-real-ip=62.56.234.66
+	x-real-ip=Y.Y.Y.Y
 	x-request-id=b225d939-6011-4535-ab64-cf5c97c48b63
 
 Request Body:
 	-no body in request-
 ```
 
-## 4. Cleanup
+Now Lets check our HTTPS termination, we will use the "-k" option to ensure curl will not check the validity of our certificate as it is self-signed, if you used your own valid certificate and potined your DNS record to the LB IP address you can remove the "-k" flag.
 
 ```bash
+curl -k https://$LB_IP/
+```
+
+## 5. Cleanup
+
+```bash
+rm tls.crt tls.key
 kubectl delete -k manifests/
 helm uninstall eg -n envoy-gateway-system
 kubectl delete namespace envoy-gateway-system
 ```
-
-## 5. TLS setup
-For TLS configuration, including Let's Encrypt and HTTPS setup,
-see the dedicated guide in [`manifests/tls/README.md`](manifests/tls/README.md).

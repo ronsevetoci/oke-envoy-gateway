@@ -6,8 +6,11 @@ metadata:
 spec:
   parentRefs:
   - name: public-gateway
-    namespace: default
+    namespace: envoy-gateway-system
     sectionName: http
+  - name: public-gateway
+    namespace: envoy-gateway-system
+    sectionName: https
   rules:
   - matches:
     - path:
