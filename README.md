@@ -52,14 +52,15 @@ This OCID is required so the OCI Load Balancer can register pod IPs as backends 
 ## 2. Install Envoy Gateway (current stable v1.7.0) - this Helm repo deploys Gateway API CRDs - if you preinstalled Gateway API CRDs this installation will fail!
 
 ```bash
-helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.7.0 -n envoy-gateway-system --create-namespace
+helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.9.1 -n envoy-gateway-system --create-namespace
 ```
 
 Confirm the Envoy Gateway pods are running.
 
 ```bash
-kubectl -n envoy-gateway-system get pods
+kubectl wait --timeout=5m -n envoy-gateway-system deployment/envoy-gateway --for=condition=Available
 ```
+Here the full guide from Envoy - https://gateway.envoyproxy.io/docs/tasks/quickstart/
 
 ## 3. Provide/Create TLS certificate as Kubernets secret for Loadbalancer TLS termination (if you have your own certificate use your required Ceritificate and key)
 
